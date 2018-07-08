@@ -15,6 +15,13 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 public class MovieArrayAdapter extends ArrayAdapter<Movie>{
+
+    private static class ViewHolder{
+        TextView tvTitle;
+        TextView tvOverView;
+        ImageView ivImage;
+    }
+
     public MovieArrayAdapter(Context context, List<Movie> movies){
         super (context, android.R.layout.simple_list_item_1, movies);
     }
@@ -24,22 +31,32 @@ public class MovieArrayAdapter extends ArrayAdapter<Movie>{
         // get tne data item  for position
         Movie movie = getItem(position);
         // get the existing view being reused
+        ViewHolder viewHolder;
         if (convertView==null){
             LayoutInflater inflater = LayoutInflater.from(getContext());
             convertView = inflater.inflate(R.layout.item_movie, parent, false);
-        }
-        ImageView ivImage= (ImageView) convertView.findViewById(R.id.ivMovieImage);
-        //clear out image from convertView
-        ivImage.setImageResource(0);
 
-        TextView tvTitle= (TextView) convertView.findViewById(R.id.tvTitle);
-        TextView tvOverView= (TextView) convertView.findViewById(R.id.tvSynopsis);
+            viewHolder = new ViewHolder();
+            viewHolder.tvTitle = (TextView) convertView.findViewById(R.id.tvTitle);
+            viewHolder.tvOverView= (TextView) convertView.findViewById(R.id.tvSynopsis);
+            viewHolder.ivImage= (ImageView) convertView.findViewById(R.id.ivMovieImage);
+
+            convertView.setTag(viewHolder);
+        }else{
+            viewHolder = (ViewHolder) convertView.getTag();
+        }
+
+        //clear out image from convertView
+        viewHolder.ivImage.setImageResource(0);
+
+
 
         //populate data
-        tvTitle.setText(movie.getOriginalTitle());
-        tvOverView.setText(movie.getOverView());
+        viewHolder.tvTitle.setText(movie.getOriginalTitle());
+        viewHolder.tvOverView.setText(movie.getOverView());
 
-        Picasso.with(getContext()).load(movie.getPosterPath()).into(ivImage);
+        Picasso.with(getContext()).load(movie.getPosterPath()).fit().centerInside().placeholder(R.drawable.ic_launcher_background)
+                .into(viewHolder.ivImage);
 
         return convertView;
     }
