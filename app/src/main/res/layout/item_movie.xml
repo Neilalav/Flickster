@@ -12,8 +12,10 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        tools:src="@mipmap/ic_launcher"
-        android:adjustViewBounds="true"/>
+        android:adjustViewBounds="true"
+        android:contentDescription="Affiche_Movie"
+        android:scaleType="centerInside"
+        tools:src="@mipmap/ic_launcher" />
 
     <TextView
         android:id="@+id/tvTitle"
